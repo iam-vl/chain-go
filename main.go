@@ -9,10 +9,17 @@ func init() {
 }
 
 func main() {
+	// b := &Block{nonce: 1}
+	// // b.Print()//
+	// fmt.Printf("Block hash: %x\n", b.Hash())
 
 	blockchain := NewBlockchain()
-	blockchain.CreateBlock(5, "hash 1")
-	blockchain.CreateBlock(2, "hash 2")
+
+	prevHash := blockchain.LastBlock().Hash()
+	blockchain.CreateBlock(5, prevHash)
+
+	prevHash = blockchain.LastBlock().Hash()
+	blockchain.CreateBlock(2, prevHash)
 	blockchain.Print()
 
 	// b := &Block{nonce: 1}

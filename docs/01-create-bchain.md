@@ -98,25 +98,96 @@ fmt.Printf("%x\n", sum) // hex
 ```go
 func (b *Block) Hash() [32]byte {
 	m, _ := json.Marshal(b)
-	// fmt.Printf("M Type: %T\n", m)           // M Type: []uint8
-	// fmt.Printf("M string: %s\n", string(m)) // M string: {} - need to marshal
+	fmt.Println(m)         
+	fmt.Println(string(m))   
 	return sha256.Sum256([]byte(m))
 }
 func main() {
 	b := &Block{nonce: 1}
-	fmt.Println("%x\n", b.Hash())
+	b.Print()
+	fmt.Printf("Block hash: %x\n", b.Hash())
 }
 ```
 Output:  
 ```
-M Type: []uint8
-M string: {}
-[68 19 111 163 85 179 103 138 17 70 173 22 247 232 100 158 148 251 79 194 31 231 126 131 16 192 96 246 28 170 255 138]
+[123 125]
+{} // because of private field
+Block hash: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
 ``` 
-private fields, so: 
+Let's marshal it: 
+```go
+func (b *Block) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Timestamp    int64    
+		Nonce        int      
+		PreviousHash string   
+		Transactions []string 
+	}{
+		Timestamp:    b.timestamp,
+		Nonce:        b.nonce,
+		PreviousHash: b.previousHash,
+		Transactions: b.transactions,
+	})
+}
+```
+Result: 
+```
+[123 34 84 105 109 101 115 116 97 109 112 34 58 48 44 34 78 111 110 99 101 34 58 49 44 34 80 114 101 118 105 111 117 115 72 97 115 104 34 58 34 34 44 34 84 114 97 110 115 97 99 116 105 111 110 115 34 58 110 117 108 108 125]
+{"Timestamp":0,"Nonce":1,"PreviousHash":"","Transactions":null}
+Block hash: 394397db5179529bdc82ddee2b78021677a0e9ddca5e1da9f2d035491bc48754
+```
+Update json: 
+```go
+func (b *Block) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Timestamp    int64    `json:"timestamp"`
+		Nonce        int      `json:"nonce"`
+		PreviousHash string   `json:"previous_hash"`
+		Transactions []string `json:"transactions"`
+	}
+    // ... 
+}
+```
+Result: 
+```
+{"timestamp":0,"nonce":1,"previous_hash":"","transactions":null}
 ```
 
-## Adding a transaction
+Update `previousHash` for [32]byte:
+```go
+type Block struct {}
+PreviousHash [32]byte `json:"previous_hash"`
+func (bc *Blockchain) CreateBlock(nonce int, prevHash [32]byte) *Block {}
+```
+Update NewBlock:
+```go
+func NewBlockchain() *Blockchain {
+	b := &Block{} // new line
+	bc := new(Blockchain)
+	bc.CreateBlock(0, b.Hash()) // change
+	return bc
+}
+```
+Getting last block:  
+```go
+func (bc *Blockchain) LastBlock() *Block {
+	return bc.chain[len(bc.chain)-1]
+}
+```
+Using block hashing in main: 
+```go
+blockchain := NewBlockchain()
+prevHash := blockchain.LastBlock().Hash()
+blockchain.CreateBlock(5, prevHash)
+prevHash = blockchain.LastBlock().Hash()
+blockchain.CreateBlock(2, prevHash)
+blockchain.Print()
+```
+
+## Adding a transaction 
+
+
+
 ## PoW, consensus, and nonce
 ## Deriving a nonce 
 ## All about mining
