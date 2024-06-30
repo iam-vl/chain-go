@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -16,11 +17,12 @@ func NewBlock(nonce int, previousHash [32]byte, transactions []*Transaction) *Bl
 	b.timestamp = time.Now().UnixNano()
 	b.nonce = nonce
 	b.previousHash = previousHash
+	b.transactions = transactions
 	return b
 }
 
 type Blockchain struct {
-	transactionPool []string
+	transactionPool []*Transaction
 	chain           []*Block
 }
 
@@ -32,9 +34,17 @@ func NewBlockchain() *Blockchain {
 }
 
 func (bc *Blockchain) CreateBlock(nonce int, prevHash [32]byte) *Block {
-	b := NewBlock(nonce, prevHash)
+	b := NewBlock(nonce, prevHash, bc.transactionPool)
 	bc.chain = append(bc.chain, b)
+	// empting the pool
+	bc.transactionPool = []*Transaction{}
 	return b
+}
+
+func (bc *Blockchain) AddTransaction(sender string, recipient string, value float32) {
+	fmt.Println("Adding a transaction...")
+	t := NewTransaction(sender, recipient, value)
+	bc.transactionPool = append(bc.transactionPool, t)
 }
 
 func (bc *Blockchain) LastBlock() *Block {
