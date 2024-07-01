@@ -186,9 +186,54 @@ blockchain.Print()
 
 ## Adding a transaction 
 
-
+```go
+func (bc *Blockchain) AddTransaction(sender string, recipient string, value float32) {
+	fmt.Println("Adding a transaction...")
+	t := NewTransaction(sender, recipient, value)
+	bc.transactionPool = append(bc.transactionPool, t)
+}
+```
 
 ## PoW, consensus, and nonce
-## Deriving a nonce 
+
+```go
+func (bc *Blockchain) ValidateProof(nonce int, previousHash [32]byte, transactions []*Transaction, difficulty int) bool {
+	zeros := strings.Repeat("0", difficulty)
+	guessBlock := Block{0, nonce, previousHash, transactions}
+	guessHashStr := fmt.Sprintf("%x", guessBlock.Hash())
+	return guessHashStr[:difficulty] == zeros
+}
+func (bc *Blockchain) ProofOfWork() int {
+	transactions := bc.CopyTransactionPool()
+	previousHash := bc.LastBlock().Hash()
+	nonce := 0
+	for !bc.ValidateProof(nonce, previousHash, transactions, MINING_DIFFICULTY) {
+		nonce += 1
+	}
+	return nonce
+}
+```
+Main:  
+```go
+blockchain := NewBlockchain()
+
+blockchain.AddTransaction("A", "B", 1.0)
+
+prevHash := blockchain.LastBlock().Hash()
+
+// blockchain.CreateBlock(5, prevHash)
+nonce := blockchain.ProofOfWork()
+blockchain.CreateBlock(nonce, prevHash)
+
+blockchain.AddTransaction("C", "D", 2.0)
+blockchain.AddTransaction("X", "Y", 3.0)
+
+prevHash = blockchain.LastBlock().Hash()
+
+// blockchain.CreateBlock(2, prevHash)
+nonce := blockchain.ProofOfWork()
+blockchain.CreateBlock(nonce, prevHash)
+```
+
 ## All about mining
 ## Calculating the transaction total 

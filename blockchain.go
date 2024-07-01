@@ -73,13 +73,6 @@ func (bc *Blockchain) ValidateProof(nonce int, previousHash [32]byte, transactio
 	return guessHashStr[:difficulty] == zeros
 }
 
-// func (bc *Blockchain) ValidProof(nonce int, previousHash [32]byte, transactions []*Transaction, difficulty int) bool {
-// 	zeros := strings.Repeat("0", difficulty)
-// 	guessBlock := Block{0, nonce, previousHash, transactions}
-// 	guessHashStr := fmt.Sprintf("%x", guessBlock.Hash())
-// 	return guessHashStr[:difficulty] == zeros
-// }
-
 func (bc *Blockchain) ProofOfWork() int {
 	transactions := bc.CopyTransactionPool()
 	previousHash := bc.LastBlock().Hash()
@@ -88,7 +81,6 @@ func (bc *Blockchain) ProofOfWork() int {
 		nonce += 1
 	}
 	return nonce
-
 }
 func (bc *Blockchain) LastBlock() *Block {
 	return bc.chain[len(bc.chain)-1]
