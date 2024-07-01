@@ -6,10 +6,16 @@ import (
 	"time"
 )
 
+//	type Block struct {
+//		nonce        int
+//		previousHash [32]byte
+//		timestamp    int64
+//		transactions []*Transaction
+//	}
 type Block struct {
+	timestamp    int64
 	nonce        int
 	previousHash [32]byte
-	timestamp    int64
 	transactions []*Transaction
 }
 
@@ -67,9 +73,22 @@ func (bc *Blockchain) ValidateProof(nonce int, previousHash [32]byte, transactio
 	return guessHashStr[:difficulty] == zeros
 }
 
+// func (bc *Blockchain) ValidProof(nonce int, previousHash [32]byte, transactions []*Transaction, difficulty int) bool {
+// 	zeros := strings.Repeat("0", difficulty)
+// 	guessBlock := Block{0, nonce, previousHash, transactions}
+// 	guessHashStr := fmt.Sprintf("%x", guessBlock.Hash())
+// 	return guessHashStr[:difficulty] == zeros
+// }
+
 func (bc *Blockchain) ProofOfWork() int {
 	transactions := bc.CopyTransactionPool()
 	previousHash := bc.LastBlock().Hash()
+	nonce := 0
+	for !bc.ValidateProof(nonce, previousHash, transactions, MINING_DIFFICULTY) {
+		nonce += 1
+	}
+	return nonce
+
 }
 func (bc *Blockchain) LastBlock() *Block {
 	return bc.chain[len(bc.chain)-1]

@@ -11,7 +11,7 @@ func (b *Block) Print() {
 	fmt.Printf("timestamp       %d\n", b.timestamp)
 	fmt.Printf("nonce           %d\n", b.nonce)
 	fmt.Printf("previousHash    %x\n", b.previousHash)
-	fmt.Printf("transactions    %s\n", b.transactions)
+	fmt.Printf("transactions    %+s\n", b.transactions)
 	for _, t := range b.transactions {
 		t.Print()
 	}
