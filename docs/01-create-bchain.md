@@ -273,7 +273,27 @@ func (bc *Blockchain) Mining() bool {
 ```
 Main():
 ```go
+func main() {
+	myBlockchainAddr := "my_blockchain_address"
+	blockchain := NewBlockchain(myBlockchainAddr)
+	// blockchain := NewBlockchain()
 
+	blockchain.AddTransaction("A", "B", 1.0)
+
+	// prevHash := blockchain.LastBlock().Hash()
+	// nonce := blockchain.ProofOfWork()
+	// blockchain.CreateBlock(nonce, prevHash)
+	blockchain.Mining()
+
+	blockchain.AddTransaction("C", "D", 2.0)
+	blockchain.AddTransaction("X", "Y", 3.0)
+
+	// prevHash = blockchain.LastBlock().Hash()
+	// nonce = blockchain.ProofOfWork()
+	// blockchain.CreateBlock(nonce, prevHash)
+	blockchain.Mining()
+	blockchain.Print()
+}
 ```
 
 ## Calculating the transaction total 
