@@ -5,6 +5,8 @@ import (
 	"log"
 )
 
+const MINING_DIFFICULTY = 3
+
 func init() {
 	log.SetPrefix("Blockchain: ")
 }
