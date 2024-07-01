@@ -236,4 +236,44 @@ blockchain.CreateBlock(nonce, prevHash)
 ```
 
 ## All about mining
+Main.go:
+```go
+const (
+	MINING_DIFFICULTY = 3
+	// adding two vals 
+	MINING_SENDER     = "THE BLOCKCHAIN"
+	MINING_REWARD     = 1.0
+)
+```
+Updating blockchain: 
+```go
+type Blockchain struct {
+	transactionPool   []*Transaction
+	chain             []*Block
+	blockchainAddress string
+}
+// func NewBlockchain() *Blockchain {
+func NewBlockchain(blockchainAddress string) *Blockchain {
+	b := &Block{} // new line
+	bc := new(Blockchain)
+	// New line
+	bc.blockchainAddress = blockchainAddress 
+	bc.CreateBlock(0, b.Hash()) 
+	return bc
+}
+// New func 
+func (bc *Blockchain) Mining() bool {
+	bc.AddTransaction(MINING_SENDER, bc.blockchainAddress, MINING_REWARD)
+	nonce := bc.ProofOfWork()
+	previousHash := bc.LastBlock().Hash()
+	bc.CreateBlock(nonce, previousHash)
+	log.Println("action=mining, status=success")
+	return true
+}
+```
+Main():
+```go
+
+```
+
 ## Calculating the transaction total 

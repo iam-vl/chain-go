@@ -2,16 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
 
-//	type Block struct {
-//		nonce        int
-//		previousHash [32]byte
-//		timestamp    int64
-//		transactions []*Transaction
-//	}
 type Block struct {
 	timestamp    int64
 	nonce        int
@@ -29,13 +24,15 @@ func NewBlock(nonce int, previousHash [32]byte, transactions []*Transaction) *Bl
 }
 
 type Blockchain struct {
-	transactionPool []*Transaction
-	chain           []*Block
+	transactionPool   []*Transaction
+	chain             []*Block
+	blockchainAddress string
 }
 
-func NewBlockchain() *Blockchain {
+func NewBlockchain(blockchainAddress string) *Blockchain {
 	b := &Block{} // new line
 	bc := new(Blockchain)
+	bc.blockchainAddress = blockchainAddress
 	bc.CreateBlock(0, b.Hash()) // change
 	return bc
 }
@@ -82,18 +79,16 @@ func (bc *Blockchain) ProofOfWork() int {
 	}
 	return nonce
 }
+
+func (bc *Blockchain) Mining() bool {
+	bc.AddTransaction(MINING_SENDER, bc.blockchainAddress, MINING_REWARD)
+	nonce := bc.ProofOfWork()
+	previousHash := bc.LastBlock().Hash()
+	bc.CreateBlock(nonce, previousHash)
+	log.Println("action=mining, status=success")
+	return true
+}
+
 func (bc *Blockchain) LastBlock() *Block {
 	return bc.chain[len(bc.chain)-1]
 }
-
-// func NewBlockchain() *Blockchain {
-// 	b := &Block{}
-// 	bc := new(Blockchain)
-// 	bc.CreateBlock(0, "init hash")
-// 	return bc
-// }
-// func (bc *Blockchain) CreateBlock(nonce int, prevHash string) *Block {
-// 	b := NewBlock(nonce, prevHash)
-// 	bc.chain = append(bc.chain, b)
-// 	return b
-// }
