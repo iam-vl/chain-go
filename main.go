@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -34,4 +35,7 @@ func main() {
 	// blockchain.CreateBlock(nonce, prevHash)
 	blockchain.Mining()
 	blockchain.Print()
+	fmt.Printf("MY %1.f\n", blockchain.CalculateTotalAmount("my_blockchain_address"))
+	fmt.Printf("C %1.f\n", blockchain.CalculateTotalAmount("C"))
+	fmt.Printf("D %1.f\n", blockchain.CalculateTotalAmount("D"))
 }
