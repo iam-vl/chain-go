@@ -5,19 +5,25 @@ import (
 	"log"
 
 	"github.com/iam-vl/chain-go/block"
+	"github.com/iam-vl/chain-go/wallet"
 )
 
-const (
-	MINING_DIFFICULTY = 3
-	MINING_SENDER     = "THE BLOCKCHAIN"
-	MINING_REWARD     = 1.0
-)
+
 
 func init() {
 	log.SetPrefix("Blockchain: ")
 }
 
-func main() {
+gunc main() {
+	w := wallet.NewWallet()
+	fmt.Println(w.PrivateKey())
+	fmt.Println(w.PublicKey())
+	fmt.Println(w.PrivateKeyStr())
+	fmt.Println(w.PublicKeyStr())
+
+}
+
+func mainCh1() {
 	myBlockchainAddr := "my_blockchain_address"
 	blockchain := block.NewBlockchain(myBlockchainAddr)
 
