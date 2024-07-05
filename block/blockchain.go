@@ -1,10 +1,16 @@
-package main
+package block
 
 import (
 	"fmt"
 	"log"
 	"strings"
 	"time"
+)
+
+const (
+	MINING_DIFFICULTY = 3
+	MINING_SENDER     = "THE BLOCKCHAIN"
+	MINING_REWARD     = 1.0
 )
 
 type Block struct {

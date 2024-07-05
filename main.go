@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+
+	"github.com/iam-vl/chain-go/block"
 )
 
 const (
@@ -17,7 +19,9 @@ func init() {
 
 func main() {
 	myBlockchainAddr := "my_blockchain_address"
-	blockchain := NewBlockchain(myBlockchainAddr)
+	blockchain := block.NewBlockchain(myBlockchainAddr)
+
+	// blockchain := block.NewBlockchain(myBlockchainAddr)
 	// blockchain := NewBlockchain()
 
 	blockchain.AddTransaction("A", "B", 1.0)
