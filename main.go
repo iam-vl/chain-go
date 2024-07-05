@@ -14,7 +14,7 @@ func init() {
 	log.SetPrefix("Blockchain: ")
 }
 
-gunc main() {
+func main() {
 	w := wallet.NewWallet()
 	fmt.Println(w.PrivateKey())
 	fmt.Println(w.PublicKey())
