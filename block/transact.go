@@ -1,5 +1,4 @@
-package block
-
+package block 
 import (
 	"encoding/json"
 	"fmt"
@@ -18,9 +17,9 @@ func NewTransaction(sender string, recipient string, value float32) *Transaction
 
 func (t *Transaction) Print() {
 	fmt.Printf("%s\n", strings.Repeat("-", 40))
-	fmt.Printf("  sender_blockchain_address      %s\n", t.senderBlockchainAddress)
-	fmt.Printf("  recipient_blockchain_address   %s\n", t.recipientBlockchainAddress)
-	fmt.Printf("  value                          %.2f\n", t.value)
+	fmt.Printf(" sender_blockchain_address      %s\n", t.senderBlockchainAddress)
+	fmt.Printf(" recipient_blockchain_address   %s\n", t.recipientBlockchainAddress)
+	fmt.Printf(" value                          %.1f\n", t.value)
 }
 
 func (t *Transaction) MarshalJSON() ([]byte, error) {
