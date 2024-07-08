@@ -6,23 +6,24 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 )
 
-// type Block struct {
-// 	nonce        int
-// 	previousHash [32]byte
-// 	timestamp    int64
-// 	transactions []*Transaction
-// }
+type Block struct {
+	nonce        int
+	previousHash [32]byte
+	timestamp    int64
+	transactions []*Transaction
+}
 
-// func NewBlock(nonce int, previousHash [32]byte, transactions []*Transaction) *Block {
-// 	b := new(Block)
-// 	b.timestamp = time.Now().UnixNano()
-// 	b.nonce = nonce
-// 	b.previousHash = previousHash
-// 	b.transactions = transactions
-// 	return b
-// }
+func NewBlock(nonce int, previousHash [32]byte, transactions []*Transaction) *Block {
+	b := new(Block)
+	b.timestamp = time.Now().UnixNano()
+	b.nonce = nonce
+	b.previousHash = previousHash
+	b.transactions = transactions
+	return b
+}
 
 func (b *Block) Print() {
 	fmt.Printf("timestamp       %d\n", b.timestamp)
